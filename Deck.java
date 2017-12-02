@@ -4,6 +4,7 @@ import java.util.Random;
 public class Deck{
 	private ArrayList<Card> cards;
 	private ArrayList<Card> usedCard;
+	private ArrayList<Card> openCard;
 	public int nUsed;
 	public Deck(int nDeck){
 		cards=new ArrayList<Card>();//存放Card
@@ -37,32 +38,44 @@ public class Deck{
 	public void shuffle(){//洗牌
 		Random rnd = new Random();
 		int j = rnd.nextInt(52);
+		if(!usedCard.isEmpty())//重設usedCard跟nUsed
+		{
+			cards = usedCard;
+			usedCard.clear();
+			nUsed =0;
+			openCard.clear();
+		}
 		for(int i=0;i<52;i++)
 		{
 			Card tmp = cards.get(i);//設一個變數存放原來的Card
 			cards.set(i,cards.get(j));//將原來的Card設為隨機產生ArrayList位置的Card
 			cards.set(j,tmp);//將隨機產生ArrayList位置的Card設為原來的Card
 		}
-		if(!usedCard.isEmpty())//重設usedCard跟nUsed
-		{
-			usedCard.clear();
-			nUsed =0;
-		}
 	}
-	public Card getOneCard(){//發牌
+	public Card getOneCard(boolean isOpened){//發牌
 		Random rnd = new Random();
-		int j = rnd.nextInt(52);
+		int i=52;
+		int j = rnd.nextInt(i);
 		if(usedCard.size()==52)//如果Card發完了,則洗牌後再發一張牌
 		{
 			shuffle();
+			i=52;
 			nUsed++;
 			usedCard.add(cards.get(j));
+			cards.remove(j);
+			i--;
 		}
 		else
 		{
 			nUsed++;
 			usedCard.add(cards.get(j));
+			cards.remove(j);
+			i--;
 		}
 		return cards.get(j);
+	}
+	public ArrayList getOpenedCard()
+	{
+		return openCard;
 	}
 }

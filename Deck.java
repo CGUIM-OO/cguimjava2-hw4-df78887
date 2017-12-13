@@ -9,6 +9,7 @@ public class Deck{
 	public Deck(int nDeck){
 		cards=new ArrayList<Card>();//存放Card
 		usedCard=new ArrayList<Card>();//存放發出過的Card
+		openCard=new ArrayList<Card>();//存放開出的Card
 		for(int d=0;d<nDeck;d++)//產生Card
 		{
 			for(Card.Suit s:Card.Suit.values())
@@ -60,6 +61,8 @@ public class Deck{
 		{
 			shuffle();
 			i=52;
+			if(isOpened)//如果要開牌,將開過的牌放在openCard
+				openCard.add(cards.get(j));
 			nUsed++;
 			usedCard.add(cards.get(j));
 			cards.remove(j);
@@ -67,6 +70,8 @@ public class Deck{
 		}
 		else
 		{
+			if(isOpened)
+				openCard.add(cards.get(j));
 			nUsed++;
 			usedCard.add(cards.get(j));
 			cards.remove(j);
